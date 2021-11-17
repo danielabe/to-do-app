@@ -6,7 +6,7 @@ window.addEventListener('load', () => {
     const password = document.getElementById('inputPassword')
     const repeatPassword = document.getElementById('inputRepeatPassword')
 
-    const baseUrl = 'https://ctd-todo-api.herokuapp.com/v1/';
+    const baseUrl = 'https://ctd-todo-api.herokuapp.com/v1/'
 
     form.addEventListener('submit', (e) => {
         e.preventDefault()
