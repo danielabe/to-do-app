@@ -5,6 +5,7 @@ window.addEventListener('load', () => {
     const completedTasks = document.querySelector('.tareas-terminadas')
     const pendingTasks = document.querySelector('.tareas-pendientes')
     const closeApp = document.getElementById('closeApp')
+    
 
     const token = localStorage.getItem('token')
 
@@ -28,6 +29,7 @@ window.addEventListener('load', () => {
     closeApp.addEventListener('click', () => logOut())
 
     
+    
     //------------- Get request: Get user infomation --------------//
 
     function fetchGetInfo(url, token) {
@@ -40,9 +42,7 @@ window.addEventListener('load', () => {
 
         fetch(url, settings)
             .then(response => response.json())
-            .then(data => {
-                usernameElement.innerText = data.firstName
-            })
+            .then(data => usernameElement.innerText = data.firstName)
             .catch(error => console.log(error))
     }
     
@@ -58,10 +58,7 @@ window.addEventListener('load', () => {
     
         fetch(url, settings)
             .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                renderTasks(data)
-            })
+            .then(data => renderTasks(data))
             .catch(error => console.log(error))
     }
     
@@ -79,11 +76,7 @@ window.addEventListener('load', () => {
         }
     
         fetch(url, settings)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                fetchGetTasks(url, token)
-            })
+            .then(response => fetchGetTasks(url, token))
             .catch(error => console.log(error))
     }
     
@@ -115,6 +108,7 @@ window.addEventListener('load', () => {
                                             </li>`
             }
         })
+        changeStatus()
     }
 
     //-------------------------- Log out --------------------------//
@@ -122,6 +116,45 @@ window.addEventListener('load', () => {
     function logOut() {
         localStorage.removeItem('token')
         location.href = 'index.html'
+    }
+
+
+    //-------------------- Change task status ---------------------//
+
+    function changeStatus() {
+        const changeBtn = document.querySelectorAll('.change')
+        changeBtn.forEach(task => {
+            task.addEventListener('click', (e) => {
+                const id = e.target.id
+                const payload = {}
+
+                if(e.target.classList.contains('not-done')) {
+                    payload.completed = true
+                } else {
+                    payload.completed = false
+                }
+                updateTask(baseUrl, id, token, payload)
+                
+            })
+        })
+    }
+
+
+    //---------------- Put request: update a task -----------------//
+
+    function updateTask(url, id, token, payload) {
+        const settings = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                authorization: token
+            },
+            body: JSON.stringify(payload)
+        }
+    
+        fetch(`${url}tasks/${id}`, settings)
+            .then(response => fetchGetTasks(`${url}tasks`, token))
+            .catch(error => console.log(error))
     }
 })
 
