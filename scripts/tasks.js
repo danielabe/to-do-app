@@ -86,6 +86,7 @@ window.addEventListener('load', () => {
     function renderTasks(list) {
         completedTasks.innerText = ''
         pendingTasks.innerText = ''
+
         list.forEach(task => {
             if (task.completed) {
                 completedTasks.innerHTML += `<li class="tarea">
@@ -103,12 +104,13 @@ window.addEventListener('load', () => {
                                                 <div class="not-done change" id="${task.id}"></div>
                                                 <div class="descripcion">
                                                     <p class="nombre">${task.description}</p>
-                                                    <p class="timestamp"><i class="far fa-calendar-alt"></i> ${task.createdAt}</p>
+                                                    <p class="timestamp"><i class="far fa-calendar-alt"></i> ${dayjs(task.createdAt).format('MM/DD/YYYY H:mm')}</p>
                                                 </div>
                                             </li>`
             }
         })
         changeStatus()
+        deleteTask()
     }
 
     //-------------------------- Log out --------------------------//
@@ -134,7 +136,6 @@ window.addEventListener('load', () => {
                     payload.completed = false
                 }
                 updateTask(baseUrl, id, token, payload)
-                
             })
         })
     }
@@ -155,6 +156,30 @@ window.addEventListener('load', () => {
         fetch(`${url}tasks/${id}`, settings)
             .then(response => fetchGetTasks(`${url}tasks`, token))
             .catch(error => console.log(error))
+    }
+
+
+    //--------------- Delete request: delete a task ---------------//
+
+    function deleteTask() {
+        const deleteBtn = document.querySelectorAll('.fa-trash-alt')
+        deleteBtn.forEach(task => {
+            task.addEventListener('click', (e) => {
+                console.log(e.target.id)
+                const id = e.target.id
+
+                const settings = {
+                    method: 'DELETE',
+                    headers: {
+                        authorization: token
+                    }
+                }
+            
+                fetch(`${baseUrl}tasks/${id}`, settings)
+                    .then(response => fetchGetTasks(`${baseUrl}tasks`, token))
+                    .catch(error => console.log(error))
+            })
+        })
     }
 })
 
