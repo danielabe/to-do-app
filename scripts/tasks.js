@@ -5,7 +5,7 @@ window.addEventListener('load', () => {
     const completedTasks = document.querySelector('.tareas-terminadas')
     const pendingTasks = document.querySelector('.tareas-pendientes')
     const closeApp = document.getElementById('closeApp')
-    
+
 
     const token = localStorage.getItem('token')
 
@@ -28,8 +28,8 @@ window.addEventListener('load', () => {
 
     closeApp.addEventListener('click', () => logOut())
 
-    
-    
+
+
     //------------- Get request: Get user infomation --------------//
 
     function fetchGetInfo(url, token) {
@@ -45,9 +45,9 @@ window.addEventListener('load', () => {
             .then(data => usernameElement.innerText = data.firstName)
             .catch(error => console.log(error))
     }
-    
+
     //---------------- Get request: Get tasks list ----------------//
-    
+
     function fetchGetTasks(url, token) {
         const settings = {
             method: 'GET',
@@ -55,16 +55,16 @@ window.addEventListener('load', () => {
                 authorization: token
             }
         }
-    
+
         fetch(url, settings)
             .then(response => response.json())
             .then(data => renderTasks(data))
             .catch(error => console.log(error))
     }
-    
-    
+
+
     //------------- Post request: create a new  task --------------//
-    
+
     function createNewTask(url, token, payload) {
         const settings = {
             method: 'POST',
@@ -74,15 +74,15 @@ window.addEventListener('load', () => {
             },
             body: JSON.stringify(payload)
         }
-    
+
         fetch(url, settings)
             .then(response => fetchGetTasks(url, token))
             .catch(error => console.log(error))
     }
-    
-    
+
+
     //--------------------- Render tasks list ---------------------//
-    
+
     function renderTasks(list) {
         completedTasks.innerText = ''
         pendingTasks.innerText = ''
@@ -100,7 +100,7 @@ window.addEventListener('load', () => {
                                                 </div>
                                             </li>`
             } else {
-                pendingTasks.innerHTML +=   `<li class="tarea">
+                pendingTasks.innerHTML += `<li class="tarea">
                                                 <div class="not-done change" id="${task.id}"></div>
                                                 <div class="descripcion">
                                                     <p class="nombre">${task.description}</p>
@@ -114,10 +114,21 @@ window.addEventListener('load', () => {
     }
 
     //-------------------------- Log out --------------------------//
-    
+
     function logOut() {
-        localStorage.removeItem('token')
-        location.href = 'index.html'
+        Swal.fire({
+            title: '¿Deseas cerrar sesión?',
+            text: "Luego, para volver a ingresar deberá colocar sus credenciales.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Cerrar sesión',
+            cancelButtonText: `Cancelar`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem('token')
+                location.href = 'index.html'
+            }
+        })
     }
 
 
@@ -130,7 +141,7 @@ window.addEventListener('load', () => {
                 const id = e.target.id
                 const payload = {}
 
-                if(e.target.classList.contains('not-done')) {
+                if (e.target.classList.contains('not-done')) {
                     payload.completed = true
                 } else {
                     payload.completed = false
@@ -152,7 +163,7 @@ window.addEventListener('load', () => {
             },
             body: JSON.stringify(payload)
         }
-    
+
         fetch(`${url}tasks/${id}`, settings)
             .then(response => fetchGetTasks(`${url}tasks`, token))
             .catch(error => console.log(error))
@@ -174,10 +185,29 @@ window.addEventListener('load', () => {
                         authorization: token
                     }
                 }
-            
-                fetch(`${baseUrl}tasks/${id}`, settings)
-                    .then(response => fetchGetTasks(`${baseUrl}tasks`, token))
-                    .catch(error => console.log(error))
+
+                Swal.fire({
+                    title: '¿Deseas eliminar esta tarea definitivamente?',
+                    text: "Esta acción no se podrá revertir.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Eliminar',
+                    cancelButtonText: `Cancelar`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`${baseUrl}tasks/${id}`, settings)
+                            .then(response => fetchGetTasks(`${baseUrl}tasks`, token))
+                            .catch(error => console.log(error))
+
+                        Swal.fire(
+                            'Tarea eliminada!',
+                            'La tarea ha sido eliminada de forma permanente.',
+                            'success'
+                        )
+                    }
+                })
+
+
             })
         })
     }
