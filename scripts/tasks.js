@@ -1,4 +1,5 @@
 window.addEventListener('load', () => {
+    AOS.init()
     const usernameElement = document.querySelector('.user-info p')
     const form = document.forms[0]
     const newTaskInput = document.getElementById('nuevaTarea')
@@ -89,7 +90,7 @@ window.addEventListener('load', () => {
 
         list.forEach(task => {
             if (task.completed) {
-                completedTasks.innerHTML += `<li class="tarea">
+                completedTasks.innerHTML += `<li class="tarea" data-aos="fade-left" data-aos-easing="ease-out-cubic" data-aos-duration="700">
                                                 <div class="done"></div>
                                                 <div class="descripcion">
                                                     <p class="nombre">${task.description}</p>
@@ -100,7 +101,7 @@ window.addEventListener('load', () => {
                                                 </div>
                                             </li>`
             } else {
-                pendingTasks.innerHTML += `<li class="tarea">
+                pendingTasks.innerHTML += `<li class="tarea" data-aos="fade-up" data-aos-easing="ease-out-cubic" data-aos-duration="700">
                                                 <div class="not-done change" id="${task.id}"></div>
                                                 <div class="descripcion">
                                                     <p class="nombre">${task.description}</p>
