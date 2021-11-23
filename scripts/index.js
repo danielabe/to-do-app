@@ -43,6 +43,7 @@ function normalizeLoginData(email, password) {
 //--------------------- Post request: Login ----------------------//
 
 function fetchApiLogin(url, payload) {
+    showSpinner()
     const settings = {
         method: 'POST',
         headers: {
@@ -54,6 +55,7 @@ function fetchApiLogin(url, payload) {
     fetch(url, settings)
     .then(response => response.json())
     .then(data => {
+        hideSpinner()
         console.log(data)
         
         if(data.jwt) {
@@ -62,4 +64,17 @@ function fetchApiLogin(url, payload) {
         }
     })
     .catch(error => console.log(error))
+}
+
+
+//---------------------------- Spinner ----------------------------//
+
+function showSpinner() {
+    const imgSpinner = document.getElementById('spinner')
+    imgSpinner.style.display = 'block'
+}
+
+function hideSpinner() {
+    const imgSpinner = document.getElementById('spinner')
+    imgSpinner.style.display = 'none'
 }
