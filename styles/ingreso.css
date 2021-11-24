@@ -12,7 +12,7 @@ h1 {
 
 form {
   position: relative;
-  max-width: 26em;
+  max-width: 353px; /* 26em */
   background-color: white;
   display: flex;
   align-items: center;
@@ -92,5 +92,14 @@ button {
 #spinner{
   width: 50%;
   margin: 0 auto;
+  display: none;
+}
+.wrong-field{
+  border: 1px solid red;
+}
+.error{
+  color: red;
+}
+.none{
   display: none;
 }

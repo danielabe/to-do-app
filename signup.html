@@ -10,6 +10,9 @@
   <!-- ---------------- estilos compartidos de login y signup ---------------- -->
   <link rel="stylesheet" href="styles/ingreso.css">
 
+  <!-- ----------------------------- sweet alert ----------------------------- -->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <!-- ---------------------- logica aplicada en register -------------------- -->
   <script src="scripts/utils.js"></script>
   <script src="scripts/signup.js"></script>
@@ -30,26 +33,35 @@
       <label>
         Nombre:
         <input type="text" id="inputName">
+        <small class="error none">*Campo obligatorio</small>
       </label>
       <label>
         Apellido:
         <input type="text" id=inputLastName>
+        <small class="error none">*Campo obligatorio</small>
       </label>
       <label>
         Email:
         <input type="text" id="inputEmail">
+        <small class="error none">*Campo obligatorio</small>
       </label>
       <label>
         Contraseña:
         <input type="password" id="inputPassword">
+        <small class="error none">*Campo obligatorio</small>
       </label>
       <label>
         Repetir contraseña:
         <input type="password" id="inputRepeatPassword">
+        <small class="error none">*Campo obligatorio</small>
       </label>
 
       <button>Crear Cuenta</button>
 
+      <div>
+        <img id="spinner" src="assets/spinner.gif" alt="Spinner">
+      </div>
+      
     </form>
     <div class="ingresarA">
       <a href="index.html">¿Ya tiene una cuenta? Ingrese aquí</a>
