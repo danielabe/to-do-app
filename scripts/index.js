@@ -14,7 +14,7 @@ window.addEventListener('load', () => {
             form.reset()
             fetchApiLogin(`${baseUrl}users/login`, userData)
         } else {
-            alert('Alguno de los campos está vacío')
+            loginError('Alguno de los campos está vacío')
         }
     })
 })
@@ -77,4 +77,16 @@ function showSpinner() {
 function hideSpinner() {
     const imgSpinner = document.getElementById('spinner')
     imgSpinner.style.display = 'none'
+}
+
+
+//----------------------------- Alert -----------------------------//
+
+function loginError(text) {
+    Swal.fire({
+        title: 'Error de inicio de sesión',
+        text: text,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+    })
 }
